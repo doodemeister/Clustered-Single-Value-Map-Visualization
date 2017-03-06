@@ -1,83 +1,37 @@
 define([
-            'jquery',
-            'underscore',
-            'leaflet',
-            'togeojson',
-            'jszip',
-            'jszip-utils',
-            'vizapi/SplunkVisualizationBase',
-            'vizapi/SplunkVisualizationUtils',
-			'leaflet-contextmenu',
-			'leaflet-dialog',
-            '../contrib/leaflet.markercluster-src',
-            '../contrib/leaflet.featuregroup.subgroup-src',
-            '../contrib/leaflet-measure',
-			'../contrib/leaflet.awesome-markers',
-            '../contrib/leaflet-vector-markers'
-        ],
-        function(
-            $,
-            _,
-            L,
-            toGeoJSON,
-            JSZip,
-            JSZipUtils,
-            SplunkVisualizationBase,
-            SplunkVisualizationUtils
-        ) {
-
-
+    'jquery',
+    'underscore',
+    'leaflet',
+    'togeojson',
+    'jszip',
+    'jszip-utils',
+    'vizapi/SplunkVisualizationBase',
+    'vizapi/SplunkVisualizationUtils',
+    'leaflet-contextmenu',
+    'leaflet-dialog',
+    'leaflet-hotline',
+    '../contrib/leaflet.markercluster-src',
+    '../contrib/leaflet.featuregroup.subgroup-src',
+    '../contrib/leaflet-measure',
+    '../contrib/leaflet.awesome-markers',
+    '../contrib/leaflet-vector-markers'
+],
+function(
+    $,
+    _,
+    L,
+    toGeoJSON,
+    JSZip,
+    JSZipUtils,
+    SplunkVisualizationBase,
+    SplunkVisualizationUtils
+) {
+    
     return SplunkVisualizationBase.extend({
         maxResults: 0,
         tileLayer: null,
         pathLineLayer: null,
         contribUri: '/en-US/static/app/leaflet_maps_app/visualizations/leaflet_maps/contrib/',
-        defaultConfig:  {
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.cluster': 1,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.allPopups': 0,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.multiplePopups': 0,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.animate': 1,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.singleMarkerMode': 0,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.maxClusterRadius': 80,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.maxSpiderfySize': 100,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.spiderfyDistanceMultiplier': 1,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapTile': 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapTileOverride': "",
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapAttributionOverride': "",
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.layerControl' : 1,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.layerControlCollapsed': 1,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.scrollWheelZoom': 1,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.fullScreen': 0,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.drilldown': 0,
-			'display.visualizations.custom.leaflet_maps_app.leaflet_maps.contextMenu': 1,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.defaultHeight': 600,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapCenterZoom': 6,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapCenterLat': 39.50,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapCenterLon': -98.35,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.minZoom': 1,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.maxZoom': 19,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.kmlOverlay' : "",
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeOneBgColor': "#B5E28C",
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeOneFgColor': "#6ECC39",
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.warningThreshold': 55,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeTwoBgColor': "#F1D357",
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeTwoFgColor': "#F0C20C",
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.criticalThreshold': 80,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeThreeBgColor': "#FD9C73",
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeThreeFgColor': "#F18017",
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureTool': 1,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureIconPosition': "topright",
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.measurePrimaryLengthUnit': "feet",
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureSecondaryLengthUnit': "miles",
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.measurePrimaryAreaUnit': "acres",
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureSecondaryAreaUnit': "sqmiles",
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureActiveColor': "#00ff00",
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureCompletedColor': "#0066ff",
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureLocalization': "en",
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.showPathLines': 0,
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.pathIdentifier': "",
-            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.pathColorList': "#0003F0,#D43C29,darkgreen,0xe2d400,darkred,#23A378"
-        },
         ATTRIBUTIONS: {
         'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png': '&copy; OpenStreetMap contributors',
         'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png': '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
@@ -111,22 +65,22 @@ define([
         validateFields: function(obj) {
             var invalidFields = {};
             var validFields = ['latitude',
-							   'longitude',
+                               'longitude',
                                'title',
-							   'description',
-							   'icon',
-							   'markerColor',
-							   'markerType',
-							   'markerPriority',
-							   'markerSize',
-						       'markerAnchor',
+                               'description',
+                               'icon',
+                               'markerColor',
+                               'markerType',
+                               'markerPriority',
+                               'markerSize',
+                               'markerAnchor',
                                'markerVisibility',
-							   'iconColor',
-						       'shadowAnchor',
-							   'shadowSize',
-							   'prefix',
-							   'extraClasses',
-						       'layerDescription'];
+                               'iconColor',
+                               'shadowAnchor',
+                               'shadowSize',
+                               'prefix',
+                               'extraClasses',
+                               'layerDescription'];
             $.each(obj, function(key, value) {
                 if($.inArray(key, validFields) === -1) {
                     invalidFields[key] = value;
@@ -136,7 +90,7 @@ define([
             return(invalidFields);
         },
 
-		// Custom drilldown behavior for markers
+        // Custom drilldown behavior for markers
         _drilldown: function(drilldownFields, resource) {
             payload = {
                 action: SplunkVisualizationBase.FIELD_VALUE_DRILLDOWN,
@@ -146,20 +100,20 @@ define([
             this.drilldown(payload);
         },
 
-		/* 
-		/ Convert 0x|# prefixed hex values to # prefixed for consistency
-		/ Splunk's eval tostring('hex') method returns 0x prefix
-		*/
-		convertHex: function(value) {
-			// Pass markerColor prefixed with # regardless of given prefix ("#" or "0x")
-			var hexRegex = /^(?:#|0x)([a-f\d]{6})$/i;
-			if (hexRegex.test(value)) {
-				markerColor = "#" + hexRegex.exec(value)[1];
-				return(markerColor);
-			} else {
-				return(value);
-			}
-		},
+        /* 
+        / Convert 0x|# prefixed hex values to # prefixed for consistency
+        / Splunk's eval tostring('hex') method returns 0x prefix
+        */
+        convertHex: function(value) {
+            // Pass markerColor prefixed with # regardless of given prefix ("#" or "0x")
+            var hexRegex = /^(?:#|0x)([a-f\d]{6})$/i;
+            if (hexRegex.test(value)) {
+                markerColor = "#" + hexRegex.exec(value)[1];
+                return(markerColor);
+            } else {
+                return(value);
+            }
+        },
 
         // Convert hex values to RGB for marker icon colors
         hexToRgb: function(hex) {
@@ -212,9 +166,9 @@ define([
 
         },
 
-		// Show dialog box with pointer lat/lon and center lat/lon
-		// coordinates. Allow user to copy and paste center coordinates into 
-		// Center Lat and Center Lon format menu options.
+        // Show dialog box with pointer lat/lon and center lat/lon
+        // coordinates. Allow user to copy and paste center coordinates into 
+        // Center Lat and Center Lon format menu options.
         showCoordinates: function (e) {
             var coordinates = e.latlng.toString().match(/([-\d\.]+)/g);
             var centerCoordinates = this.map.getCenter().toString().match(/([-\d\.]+)/g);
@@ -255,17 +209,17 @@ define([
                         var kmlText = $.parseXML(text);
                         var geojson = toGeoJSON.kml(kmlText);
 
-						L.geoJson(geojson.features, {
-							style: function (feature) {
-								return {color: feature.properties.fill,
-										opacity: feature.properties["fill-opacity"],
-										weight: feature.properties["stroke-width"]};
-							},
-							onEachFeature: function (feature, layer) {
-								layer.bindPopup(feature.properties.name);
-								layer.bindTooltip(feature.properties.name);
-							}
-						}).addTo(map);
+                        L.geoJson(geojson.features, {
+                            style: function (feature) {
+                                return {color: feature.properties.fill,
+                                        opacity: feature.properties["fill-opacity"],
+                                        weight: feature.properties["stroke-width"]};
+                            },
+                            onEachFeature: function (feature, layer) {
+                                layer.bindPopup(feature.properties.name);
+                                layer.bindTooltip(feature.properties.name);
+                            }
+                        }).addTo(map);
                     });
                 });
             // it's a kml file
@@ -273,28 +227,85 @@ define([
                 $.ajax({url: url, dataType: 'xml', context: this}).done(function(kml) {
                     var geojson = toGeoJSON.kml(kml);
 
-					L.geoJson(geojson.features, {
-						style: function (feature) {
-							return {color: feature.properties.fill,
-									opacity: feature.properties["fill-opacity"],
-									weight: feature.properties["stroke-width"]};
-						 },
-						 onEachFeature: function (feature, layer) {
-							 layer.bindPopup(feature.properties.name);
-							 layer.bindTooltip(feature.properties.name);
-						}
-					}).addTo(map);
+                    L.geoJson(geojson.features, {
+                        style: function (feature) {
+                            return {color: feature.properties.fill,
+                                    opacity: feature.properties["fill-opacity"],
+                                    weight: feature.properties["stroke-width"]};
+                         },
+                         onEachFeature: function (feature, layer) {
+                             layer.bindPopup(feature.properties.name);
+                             layer.bindTooltip(feature.properties.name);
+                        }
+                    }).addTo(map);
                 });
             }
         },
 
+        reflow: function() {
+            this.invalidateUpdateView();
+        },
+
         // Do the work of creating the viz
         updateView: function(data, config) {
-            // viz gets passed empty config until you click the 'format' dropdown
-            // intialize with defaults
-            if(_.isEmpty(config)) {
-                config = this.defaultConfig;
-            }
+            
+            var appNamespace = this.getPropertyNamespaceInfo().propertyNamespace;
+
+            // Get format parameters or set default values according to Modular Viz -> Splunk 6.5.2
+            var cluster     = parseInt(config[appNamespace + 'cluster']),
+                allPopups   = parseInt(config[appNamespace + 'allPopups']),
+                multiplePopups = parseInt(config[appNamespace + 'multiplePopups']),
+                animate     = parseInt(config[appNamespace + 'animate']),
+                singleMarkerMode = parseInt(config[appNamespace + 'singleMarkerMode']),
+                maxClusterRadius = parseInt(config[appNamespace + 'maxClusterRadius']),
+                maxSpiderfySize = parseInt(config[appNamespace + 'maxSpiderfySize']),
+                spiderfyDistanceMultiplier = parseInt(config[appNamespace + 'spiderfyDistanceMultiplier']),
+                mapTile     = SplunkVisualizationUtils.makeSafeUrl(config[appNamespace + 'mapTile']),
+                mapTileOverride  = SplunkVisualizationUtils.makeSafeUrl(config[appNamespace + 'mapTileOverride']),
+                mapAttributionOverride = config[appNamespace + 'mapAttributionOverride'],
+                layerControl = parseInt(config[appNamespace + 'layerControl']),
+                layerControlCollapsed = parseInt(config[appNamespace + 'layerControlCollapsed']),
+                scrollWheelZoom = parseInt(config[appNamespace + 'scrollWheelZoom']),
+                fullScreen = parseInt(config[appNamespace + 'fullScreen']),
+                drilldown = parseInt(config[appNamespace + 'drilldown']),
+                contextMenu = parseInt(config[appNamespace + 'contextMenu']),
+                defaultHeight = parseInt(config[appNamespace + 'defaultHeight']),
+                mapCenterZoom = parseInt(config[appNamespace + 'mapCenterZoom']),
+                mapCenterLat = parseFloat(config[appNamespace + 'mapCenterLat']),
+                mapCenterLon = parseFloat(config[appNamespace + 'mapCenterLon']),
+                minZoom     = parseInt(config[appNamespace + 'minZoom']),
+                maxZoom     = parseInt(config[appNamespace + 'maxZoom']),
+                kmlOverlay  = config[appNamespace + 'kmlOverlay'],
+                rangeOneBgColor = config[appNamespace + 'rangeOneBgColor'],
+                rangeOneFgColor = config[appNamespace + 'rangeOneFgColor'],
+                warningThreshold = parseInt(config[appNamespace + 'warningThreshold']),
+                rangeTwoBgColor = config[appNamespace + 'rangeTwoBgColor'],
+                rangeTwoFgColor = config[appNamespace + 'rangeTwoFgColor'],
+                criticalThreshold = parseInt(config[appNamespace + 'criticalThreshold']),
+                rangeThreeBgColor = config[appNamespace + 'rangeThreeBgColor'],
+                rangeThreeFgColor = config[appNamespace + 'rangeThreeFgColor'],
+                measureTool = parseInt(config[appNamespace + 'measureTool']),
+                measureIconPosition = config[appNamespace + 'measureIconPosition'],
+                measurePrimaryLengthUnit = config[appNamespace + 'measurePrimaryLengthUnit'],
+                measureSecondaryLengthUnit = config[appNamespace + 'measureSecondaryLengthUnit'],
+                measurePrimaryAreaUnit = config[appNamespace + 'measurePrimaryAreaUnit'],
+                measureSecondaryAreaUnit = config[appNamespace + 'measureSecondaryAreaUnit'],
+                measureActiveColor = config[appNamespace + 'measureActiveColor'],
+                measureCompletedColor = config[appNamespace + 'measureCompletedColor'],
+                measureLocalization = config[appNamespace + 'measureLocalization'],
+                showPathLines = parseInt(config[appNamespace + 'showPathLines']),
+                pathIdentifier = config[appNamespace + 'pathIdentifier'],
+                pathColorList = config[appNamespace + 'pathColorList'],
+                showHeatLine  = parseInt(config[appNamespace + 'showHeatLine']),
+                heatLineIdentifier = config[appNamespace + 'heatLineIdentifier'],
+                heatLineMaxValue = parseInt(config[appNamespace + 'heatLineMaxValue']),
+                heatLineMinValue = parseInt(config[appNamespace + 'heatLineMinValue']),
+                heatLineWeight = parseInt(config[appNamespace + 'heatLineWeight']),
+                heatLineMinColor = config[appNamespace + 'heatLineMinColor'],
+                heatLineMedColor = config[appNamespace + 'heatLineMedColor'],
+                heatLineMaxColor = config[appNamespace + 'heatLineMaxColor'],
+                heatLineBorderWidth = parseInt(config[appNamespace + 'heatLineBorderWidth']),
+                heatLineBorderColor = config[appNamespace + 'heatLineBorderColor'];
 
             // Clear map and reset everything
             if(this.clearMap === true) {
@@ -312,6 +323,7 @@ define([
                     lg.markerList = [];
                 }, this);
                 this.pathLineLayer.clearLayers();
+                this.hotlineLayer.clearLayers();
             }
 
             // get data
@@ -328,52 +340,6 @@ define([
                     'Incorrect Fields Detected - latitude & longitude fields required'
                 );
             }
-
-            // get configs
-            var cluster     = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.cluster']),
-                allPopups   = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.allPopups']),
-                multiplePopups = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.multiplePopups']),
-                animate     = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.animate']),
-                singleMarkerMode = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.singleMarkerMode']),
-                maxClusterRadius = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.maxClusterRadius']),
-                maxSpiderfySize = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.maxSpiderfySize']),
-                spiderfyDistanceMultiplier = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.spiderfyDistanceMultiplier']),
-                mapTile     = SplunkVisualizationUtils.makeSafeUrl(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapTile']),
-                mapTileOverride  = SplunkVisualizationUtils.makeSafeUrl(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapTileOverride']),
-                mapAttributionOverride = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapAttributionOverride'],
-                layerControl = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.layerControl']),
-                layerControlCollapsed = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.layerControlCollapsed']),
-                scrollWheelZoom = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.scrollWheelZoom']),
-                fullScreen = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.fullScreen']),
-                drilldown = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.drilldown']),
-				contextMenu = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.contextMenu']),
-                defaultHeight = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.defaultHeight']),
-                mapCenterZoom = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapCenterZoom']),
-                mapCenterLat = parseFloat(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapCenterLat']),
-                mapCenterLon = parseFloat(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapCenterLon']),
-                minZoom     = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.minZoom']),
-                maxZoom     = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.maxZoom']),
-                kmlOverlay  = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.kmlOverlay'],
-                rangeOneBgColor = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeOneBgColor'],
-                rangeOneFgColor = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeOneFgColor'],
-                warningThreshold = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.warningThreshold'],
-                rangeTwoBgColor = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeTwoBgColor'],
-                rangeTwoFgColor = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeTwoFgColor'],
-                criticalThreshold = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.criticalThreshold'],
-                rangeThreeBgColor = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeThreeBgColor'],
-                rangeThreeFgColor = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeThreeFgColor'],
-                measureTool = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureTool']),
-                measureIconPosition = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureIconPosition'],
-                measurePrimaryLengthUnit = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.measurePrimaryLengthUnit'],
-                measureSecondaryLengthUnit = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureSecondaryLengthUnit'],
-                measurePrimaryAreaUnit = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.measurePrimaryAreaUnit'],
-                measureSecondaryAreaUnit = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureSecondaryAreaUnit'],
-                measureActiveColor = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureActiveColor'],
-                measureCompletedColor = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureCompletedColor'],
-                measureLocalization = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureLocalization'],
-                showPathLines = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.showPathLines']),
-                pathIdentifier = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.pathIdentifier'],
-                pathColorList = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.pathColorList'];
 
             this.activeTile = (mapTileOverride) ? mapTileOverride:mapTile;
             this.attribution = (mapAttributionOverride) ? mapAttributionOverride:this.ATTRIBUTIONS[mapTile];
@@ -445,11 +411,11 @@ define([
                 var map = this.map = new L.Map(this.el, mapOptions).setView([mapCenterLat, mapCenterLon], mapCenterZoom);
                
                 // Setup the tile layer with map tile, zoom and attribution
-				this.tileLayer = L.tileLayer(this.activeTile, {
+                this.tileLayer = L.tileLayer(this.activeTile, {
                     attribution: this.attribution,
                     minZoom: minZoom,
                     maxZoom: maxZoom
-				});
+                });
 
                 // Add tile layer to map
                 this.map.addLayer(this.tileLayer);   
@@ -524,11 +490,12 @@ define([
                 }
                 
                 this.pathLineLayer = L.layerGroup().addTo(this.map);
+                this.hotlineLayer = L.layerGroup().addTo(this.map);
                
                 // Init defaults
                 this.chunk = 50000;
                 this.offset = 0;
-				this.isInitializedDom = true;         
+                this.isInitializedDom = true;         
                 this.clearMap = false;
             } 
 
@@ -555,7 +522,7 @@ define([
                 this.map.setZoom(mapCenterZoom);
             }
            
-			/********* BEGIN PROCESSING DATA **********/
+            /********* BEGIN PROCESSING DATA **********/
  
             // Iterate through each row creating layer groups per icon type
             // and create markers appending to a markerList in each layerfilter object
@@ -607,13 +574,13 @@ define([
 
                 var description = _.has(userData, "description") ? userData["description"]:"";
 
-				// SVG and PNG based markers both support hex iconColor do conversion outside
-				iconColor = this.convertHex(iconColor);	
+                // SVG and PNG based markers both support hex iconColor do conversion outside
+                iconColor = this.convertHex(iconColor);    
 
                 if (markerType == "svg") {
-					// Update marker to shade of Awesome Marker blue
-					if(markerColor == "blue") { markerColor = "#38AADD"; }
-					markerColor = this.convertHex(markerColor);
+                    // Update marker to shade of Awesome Marker blue
+                    if(markerColor == "blue") { markerColor = "#38AADD"; }
+                    markerColor = this.convertHex(markerColor);
 
                     var markerIcon = L.VectorMarkers.icon({
                         icon: icon,
@@ -624,7 +591,7 @@ define([
                         extraIconClasses: extraClasses,
                         prefix: prefix,
                         iconSize: markerSize,
-						iconAnchor: markerAnchor,
+                        iconAnchor: markerAnchor,
                     });
                 } else {
                     // Create markerIcon
@@ -643,8 +610,8 @@ define([
                 }
 
                 /* Add the icon to layerFilter so we can access properties
-				 * for overlay in addLayerToControl
-				 */
+                 * for overlay in addLayerToControl
+                 */
                 if (typeof this.layerFilter[icon] !== 'undefined') {
                     this.layerFilter[icon].icon = markerIcon;
                 }
@@ -654,10 +621,10 @@ define([
                                       {icon: markerIcon,
                                        title: title,
                                        layerDescription: layerDescription,
-									   zIndexOffset: markerPriority});
+                                       zIndexOffset: markerPriority});
 
                 if(this.isArgTrue(drilldown)) {
-					var drilldownFields = this.validateFields(userData);
+                    var drilldownFields = this.validateFields(userData);
                     marker.on('dblclick', this._drilldown.bind(this, drilldownFields));
                 }
 
@@ -716,7 +683,6 @@ define([
                     // Add layer controls
                     this.addLayerToControl(lg, this.control);
                 }, this);
-
             }
 
             // Chunk through data 50k results at a time
@@ -751,12 +717,64 @@ define([
                 paths = _.groupBy(paths, function (d) {
                     return d.colorIndex;
                 });
-                
+
                 _.each(paths, function(path) {
                     L.polyline(_.pluck(path, 'coordinates'), {color: colors[path[0]['colorIndex'] % colors.length]}).addTo(this.pathLineLayer);
                 }, this);
             }
+
+            // if(this.isArgTrue(drawHeatline))
+            if(this.isArgTrue(showHeatLine))
+            {
+                var activePaths = [];
                 
+                var paths = _.map(dataRows, function (d) {
+                    var colorIndex = 0;
+                    if (pathIdentifier) {
+                        var id = d[pathIdentifier];
+                        var colorIndex = activePaths.indexOf(id);
+                        if (colorIndex < 0) {
+                            colorIndex = activePaths.push(id) - 1;
+                        }
+                    }
+                    var fieldId = "value";
+                    if(heatLineIdentifier != "")
+                    {
+                        fieldId = heatLineIdentifier;
+                        // console.log(fieldId);
+                    }
+
+                    return {
+                        'coordinates': [d['latitude'], d['longitude'], d[fieldId]],
+                    };
+                });
+                paths = _.groupBy(paths, function (d) {
+                    return d.colorIndex;
+                });
+
+                _.each(paths, function(path) {
+                    let coords = _.pluck(path, 'coordinates');
+                    // console.log(coords);
+                    let options = {
+                        min: heatLineMinValue,
+                        max: heatLineMaxValue,
+                        palette: {
+                            0.0: heatLineMinColor,
+                            0.5: heatLineMedColor,
+                            1.0: heatLineMaxColor
+                        },
+                        weight: heatLineWeight,
+                        outlineColor: heatLineBorderColor,
+                        outlineWidth: heatLineBorderWidth
+                    };
+                    // console.log(options);
+                    let mapHotline = L.hotline(coords, options);
+
+                    // console.log(mapHotline);
+                    mapHotline.addTo(this.hotlineLayer);
+                    
+                }, this);
+            }
             return this;
         }
     });

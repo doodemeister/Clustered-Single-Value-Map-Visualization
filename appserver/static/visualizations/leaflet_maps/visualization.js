@@ -45,84 +45,38 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	            __webpack_require__(3),
-	            __webpack_require__(113),
-	            __webpack_require__(2),
-	            __webpack_require__(4),
-	            __webpack_require__(7),
-	            __webpack_require__(110),
-	            __webpack_require__(111),
-	            __webpack_require__(112),
-				__webpack_require__(1),
-				__webpack_require__(114),
-	            __webpack_require__(115),
-	            __webpack_require__(116),
-	            __webpack_require__(117),
-				__webpack_require__(118),
-	            __webpack_require__(119)
-	        ], __WEBPACK_AMD_DEFINE_RESULT__ = function(
-	            $,
-	            _,
-	            L,
-	            toGeoJSON,
-	            JSZip,
-	            JSZipUtils,
-	            SplunkVisualizationBase,
-	            SplunkVisualizationUtils
-	        ) {
-
-
+	    __webpack_require__(3),
+	    __webpack_require__(113),
+	    __webpack_require__(2),
+	    __webpack_require__(4),
+	    __webpack_require__(7),
+	    __webpack_require__(110),
+	    __webpack_require__(111),
+	    __webpack_require__(112),
+	    __webpack_require__(1),
+	    __webpack_require__(114),
+	    __webpack_require__(115),
+	    __webpack_require__(116),
+	    __webpack_require__(117),
+	    __webpack_require__(118),
+	    __webpack_require__(119),
+	    __webpack_require__(120)
+	], __WEBPACK_AMD_DEFINE_RESULT__ = function(
+	    $,
+	    _,
+	    L,
+	    toGeoJSON,
+	    JSZip,
+	    JSZipUtils,
+	    SplunkVisualizationBase,
+	    SplunkVisualizationUtils
+	) {
+	    
 	    return SplunkVisualizationBase.extend({
 	        maxResults: 0,
 	        tileLayer: null,
 	        pathLineLayer: null,
 	        contribUri: '/en-US/static/app/leaflet_maps_app/visualizations/leaflet_maps/contrib/',
-	        defaultConfig:  {
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.cluster': 1,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.allPopups': 0,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.multiplePopups': 0,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.animate': 1,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.singleMarkerMode': 0,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.maxClusterRadius': 80,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.maxSpiderfySize': 100,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.spiderfyDistanceMultiplier': 1,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapTile': 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapTileOverride': "",
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapAttributionOverride': "",
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.layerControl' : 1,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.layerControlCollapsed': 1,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.scrollWheelZoom': 1,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.fullScreen': 0,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.drilldown': 0,
-				'display.visualizations.custom.leaflet_maps_app.leaflet_maps.contextMenu': 1,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.defaultHeight': 600,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapCenterZoom': 6,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapCenterLat': 39.50,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapCenterLon': -98.35,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.minZoom': 1,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.maxZoom': 19,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.kmlOverlay' : "",
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeOneBgColor': "#B5E28C",
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeOneFgColor': "#6ECC39",
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.warningThreshold': 55,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeTwoBgColor': "#F1D357",
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeTwoFgColor': "#F0C20C",
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.criticalThreshold': 80,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeThreeBgColor': "#FD9C73",
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeThreeFgColor': "#F18017",
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureTool': 1,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureIconPosition': "topright",
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.measurePrimaryLengthUnit': "feet",
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureSecondaryLengthUnit': "miles",
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.measurePrimaryAreaUnit': "acres",
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureSecondaryAreaUnit': "sqmiles",
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureActiveColor': "#00ff00",
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureCompletedColor': "#0066ff",
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureLocalization': "en",
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.showPathLines': 0,
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.pathIdentifier': "",
-	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.pathColorList': "#0003F0,#D43C29,darkgreen,0xe2d400,darkred,#23A378"
-	        },
 	        ATTRIBUTIONS: {
 	        'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png': '&copy; OpenStreetMap contributors',
 	        'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png': '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
@@ -156,22 +110,22 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	        validateFields: function(obj) {
 	            var invalidFields = {};
 	            var validFields = ['latitude',
-								   'longitude',
+	                               'longitude',
 	                               'title',
-								   'description',
-								   'icon',
-								   'markerColor',
-								   'markerType',
-								   'markerPriority',
-								   'markerSize',
-							       'markerAnchor',
+	                               'description',
+	                               'icon',
+	                               'markerColor',
+	                               'markerType',
+	                               'markerPriority',
+	                               'markerSize',
+	                               'markerAnchor',
 	                               'markerVisibility',
-								   'iconColor',
-							       'shadowAnchor',
-								   'shadowSize',
-								   'prefix',
-								   'extraClasses',
-							       'layerDescription'];
+	                               'iconColor',
+	                               'shadowAnchor',
+	                               'shadowSize',
+	                               'prefix',
+	                               'extraClasses',
+	                               'layerDescription'];
 	            $.each(obj, function(key, value) {
 	                if($.inArray(key, validFields) === -1) {
 	                    invalidFields[key] = value;
@@ -181,7 +135,7 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	            return(invalidFields);
 	        },
 
-			// Custom drilldown behavior for markers
+	        // Custom drilldown behavior for markers
 	        _drilldown: function(drilldownFields, resource) {
 	            payload = {
 	                action: SplunkVisualizationBase.FIELD_VALUE_DRILLDOWN,
@@ -191,20 +145,20 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	            this.drilldown(payload);
 	        },
 
-			/* 
-			/ Convert 0x|# prefixed hex values to # prefixed for consistency
-			/ Splunk's eval tostring('hex') method returns 0x prefix
-			*/
-			convertHex: function(value) {
-				// Pass markerColor prefixed with # regardless of given prefix ("#" or "0x")
-				var hexRegex = /^(?:#|0x)([a-f\d]{6})$/i;
-				if (hexRegex.test(value)) {
-					markerColor = "#" + hexRegex.exec(value)[1];
-					return(markerColor);
-				} else {
-					return(value);
-				}
-			},
+	        /* 
+	        / Convert 0x|# prefixed hex values to # prefixed for consistency
+	        / Splunk's eval tostring('hex') method returns 0x prefix
+	        */
+	        convertHex: function(value) {
+	            // Pass markerColor prefixed with # regardless of given prefix ("#" or "0x")
+	            var hexRegex = /^(?:#|0x)([a-f\d]{6})$/i;
+	            if (hexRegex.test(value)) {
+	                markerColor = "#" + hexRegex.exec(value)[1];
+	                return(markerColor);
+	            } else {
+	                return(value);
+	            }
+	        },
 
 	        // Convert hex values to RGB for marker icon colors
 	        hexToRgb: function(hex) {
@@ -257,9 +211,9 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 
 	        },
 
-			// Show dialog box with pointer lat/lon and center lat/lon
-			// coordinates. Allow user to copy and paste center coordinates into 
-			// Center Lat and Center Lon format menu options.
+	        // Show dialog box with pointer lat/lon and center lat/lon
+	        // coordinates. Allow user to copy and paste center coordinates into 
+	        // Center Lat and Center Lon format menu options.
 	        showCoordinates: function (e) {
 	            var coordinates = e.latlng.toString().match(/([-\d\.]+)/g);
 	            var centerCoordinates = this.map.getCenter().toString().match(/([-\d\.]+)/g);
@@ -300,17 +254,17 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                        var kmlText = $.parseXML(text);
 	                        var geojson = toGeoJSON.kml(kmlText);
 
-							L.geoJson(geojson.features, {
-								style: function (feature) {
-									return {color: feature.properties.fill,
-											opacity: feature.properties["fill-opacity"],
-											weight: feature.properties["stroke-width"]};
-								},
-								onEachFeature: function (feature, layer) {
-									layer.bindPopup(feature.properties.name);
-									layer.bindTooltip(feature.properties.name);
-								}
-							}).addTo(map);
+	                        L.geoJson(geojson.features, {
+	                            style: function (feature) {
+	                                return {color: feature.properties.fill,
+	                                        opacity: feature.properties["fill-opacity"],
+	                                        weight: feature.properties["stroke-width"]};
+	                            },
+	                            onEachFeature: function (feature, layer) {
+	                                layer.bindPopup(feature.properties.name);
+	                                layer.bindTooltip(feature.properties.name);
+	                            }
+	                        }).addTo(map);
 	                    });
 	                });
 	            // it's a kml file
@@ -318,28 +272,85 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                $.ajax({url: url, dataType: 'xml', context: this}).done(function(kml) {
 	                    var geojson = toGeoJSON.kml(kml);
 
-						L.geoJson(geojson.features, {
-							style: function (feature) {
-								return {color: feature.properties.fill,
-										opacity: feature.properties["fill-opacity"],
-										weight: feature.properties["stroke-width"]};
-							 },
-							 onEachFeature: function (feature, layer) {
-								 layer.bindPopup(feature.properties.name);
-								 layer.bindTooltip(feature.properties.name);
-							}
-						}).addTo(map);
+	                    L.geoJson(geojson.features, {
+	                        style: function (feature) {
+	                            return {color: feature.properties.fill,
+	                                    opacity: feature.properties["fill-opacity"],
+	                                    weight: feature.properties["stroke-width"]};
+	                         },
+	                         onEachFeature: function (feature, layer) {
+	                             layer.bindPopup(feature.properties.name);
+	                             layer.bindTooltip(feature.properties.name);
+	                        }
+	                    }).addTo(map);
 	                });
 	            }
 	        },
 
+	        reflow: function() {
+	            this.invalidateUpdateView();
+	        },
+
 	        // Do the work of creating the viz
 	        updateView: function(data, config) {
-	            // viz gets passed empty config until you click the 'format' dropdown
-	            // intialize with defaults
-	            if(_.isEmpty(config)) {
-	                config = this.defaultConfig;
-	            }
+	            
+	            var appNamespace = this.getPropertyNamespaceInfo().propertyNamespace;
+
+	            // Get format parameters or set default values according to Modular Viz -> Splunk 6.5.2
+	            var cluster     = parseInt(config[appNamespace + 'cluster']),
+	                allPopups   = parseInt(config[appNamespace + 'allPopups']),
+	                multiplePopups = parseInt(config[appNamespace + 'multiplePopups']),
+	                animate     = parseInt(config[appNamespace + 'animate']),
+	                singleMarkerMode = parseInt(config[appNamespace + 'singleMarkerMode']),
+	                maxClusterRadius = parseInt(config[appNamespace + 'maxClusterRadius']),
+	                maxSpiderfySize = parseInt(config[appNamespace + 'maxSpiderfySize']),
+	                spiderfyDistanceMultiplier = parseInt(config[appNamespace + 'spiderfyDistanceMultiplier']),
+	                mapTile     = SplunkVisualizationUtils.makeSafeUrl(config[appNamespace + 'mapTile']),
+	                mapTileOverride  = SplunkVisualizationUtils.makeSafeUrl(config[appNamespace + 'mapTileOverride']),
+	                mapAttributionOverride = config[appNamespace + 'mapAttributionOverride'],
+	                layerControl = parseInt(config[appNamespace + 'layerControl']),
+	                layerControlCollapsed = parseInt(config[appNamespace + 'layerControlCollapsed']),
+	                scrollWheelZoom = parseInt(config[appNamespace + 'scrollWheelZoom']),
+	                fullScreen = parseInt(config[appNamespace + 'fullScreen']),
+	                drilldown = parseInt(config[appNamespace + 'drilldown']),
+	                contextMenu = parseInt(config[appNamespace + 'contextMenu']),
+	                defaultHeight = parseInt(config[appNamespace + 'defaultHeight']),
+	                mapCenterZoom = parseInt(config[appNamespace + 'mapCenterZoom']),
+	                mapCenterLat = parseFloat(config[appNamespace + 'mapCenterLat']),
+	                mapCenterLon = parseFloat(config[appNamespace + 'mapCenterLon']),
+	                minZoom     = parseInt(config[appNamespace + 'minZoom']),
+	                maxZoom     = parseInt(config[appNamespace + 'maxZoom']),
+	                kmlOverlay  = config[appNamespace + 'kmlOverlay'],
+	                rangeOneBgColor = config[appNamespace + 'rangeOneBgColor'],
+	                rangeOneFgColor = config[appNamespace + 'rangeOneFgColor'],
+	                warningThreshold = parseInt(config[appNamespace + 'warningThreshold']),
+	                rangeTwoBgColor = config[appNamespace + 'rangeTwoBgColor'],
+	                rangeTwoFgColor = config[appNamespace + 'rangeTwoFgColor'],
+	                criticalThreshold = parseInt(config[appNamespace + 'criticalThreshold']),
+	                rangeThreeBgColor = config[appNamespace + 'rangeThreeBgColor'],
+	                rangeThreeFgColor = config[appNamespace + 'rangeThreeFgColor'],
+	                measureTool = parseInt(config[appNamespace + 'measureTool']),
+	                measureIconPosition = config[appNamespace + 'measureIconPosition'],
+	                measurePrimaryLengthUnit = config[appNamespace + 'measurePrimaryLengthUnit'],
+	                measureSecondaryLengthUnit = config[appNamespace + 'measureSecondaryLengthUnit'],
+	                measurePrimaryAreaUnit = config[appNamespace + 'measurePrimaryAreaUnit'],
+	                measureSecondaryAreaUnit = config[appNamespace + 'measureSecondaryAreaUnit'],
+	                measureActiveColor = config[appNamespace + 'measureActiveColor'],
+	                measureCompletedColor = config[appNamespace + 'measureCompletedColor'],
+	                measureLocalization = config[appNamespace + 'measureLocalization'],
+	                showPathLines = parseInt(config[appNamespace + 'showPathLines']),
+	                pathIdentifier = config[appNamespace + 'pathIdentifier'],
+	                pathColorList = config[appNamespace + 'pathColorList'],
+	                showHeatLine  = parseInt(config[appNamespace + 'showHeatLine']),
+	                heatLineIdentifier = config[appNamespace + 'heatLineIdentifier'],
+	                heatLineMaxValue = parseInt(config[appNamespace + 'heatLineMaxValue']),
+	                heatLineMinValue = parseInt(config[appNamespace + 'heatLineMinValue']),
+	                heatLineWeight = parseInt(config[appNamespace + 'heatLineWeight']),
+	                heatLineMinColor = config[appNamespace + 'heatLineMinColor'],
+	                heatLineMedColor = config[appNamespace + 'heatLineMedColor'],
+	                heatLineMaxColor = config[appNamespace + 'heatLineMaxColor'],
+	                heatLineBorderWidth = parseInt(config[appNamespace + 'heatLineBorderWidth']),
+	                heatLineBorderColor = config[appNamespace + 'heatLineBorderColor'];
 
 	            // Clear map and reset everything
 	            if(this.clearMap === true) {
@@ -357,6 +368,7 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                    lg.markerList = [];
 	                }, this);
 	                this.pathLineLayer.clearLayers();
+	                this.hotlineLayer.clearLayers();
 	            }
 
 	            // get data
@@ -373,52 +385,6 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                    'Incorrect Fields Detected - latitude & longitude fields required'
 	                );
 	            }
-
-	            // get configs
-	            var cluster     = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.cluster']),
-	                allPopups   = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.allPopups']),
-	                multiplePopups = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.multiplePopups']),
-	                animate     = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.animate']),
-	                singleMarkerMode = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.singleMarkerMode']),
-	                maxClusterRadius = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.maxClusterRadius']),
-	                maxSpiderfySize = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.maxSpiderfySize']),
-	                spiderfyDistanceMultiplier = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.spiderfyDistanceMultiplier']),
-	                mapTile     = SplunkVisualizationUtils.makeSafeUrl(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapTile']),
-	                mapTileOverride  = SplunkVisualizationUtils.makeSafeUrl(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapTileOverride']),
-	                mapAttributionOverride = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapAttributionOverride'],
-	                layerControl = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.layerControl']),
-	                layerControlCollapsed = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.layerControlCollapsed']),
-	                scrollWheelZoom = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.scrollWheelZoom']),
-	                fullScreen = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.fullScreen']),
-	                drilldown = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.drilldown']),
-					contextMenu = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.contextMenu']),
-	                defaultHeight = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.defaultHeight']),
-	                mapCenterZoom = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapCenterZoom']),
-	                mapCenterLat = parseFloat(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapCenterLat']),
-	                mapCenterLon = parseFloat(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.mapCenterLon']),
-	                minZoom     = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.minZoom']),
-	                maxZoom     = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.maxZoom']),
-	                kmlOverlay  = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.kmlOverlay'],
-	                rangeOneBgColor = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeOneBgColor'],
-	                rangeOneFgColor = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeOneFgColor'],
-	                warningThreshold = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.warningThreshold'],
-	                rangeTwoBgColor = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeTwoBgColor'],
-	                rangeTwoFgColor = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeTwoFgColor'],
-	                criticalThreshold = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.criticalThreshold'],
-	                rangeThreeBgColor = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeThreeBgColor'],
-	                rangeThreeFgColor = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.rangeThreeFgColor'],
-	                measureTool = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureTool']),
-	                measureIconPosition = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureIconPosition'],
-	                measurePrimaryLengthUnit = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.measurePrimaryLengthUnit'],
-	                measureSecondaryLengthUnit = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureSecondaryLengthUnit'],
-	                measurePrimaryAreaUnit = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.measurePrimaryAreaUnit'],
-	                measureSecondaryAreaUnit = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureSecondaryAreaUnit'],
-	                measureActiveColor = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureActiveColor'],
-	                measureCompletedColor = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureCompletedColor'],
-	                measureLocalization = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureLocalization'],
-	                showPathLines = parseInt(config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.showPathLines']),
-	                pathIdentifier = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.pathIdentifier'],
-	                pathColorList = config['display.visualizations.custom.leaflet_maps_app.leaflet_maps.pathColorList'];
 
 	            this.activeTile = (mapTileOverride) ? mapTileOverride:mapTile;
 	            this.attribution = (mapAttributionOverride) ? mapAttributionOverride:this.ATTRIBUTIONS[mapTile];
@@ -490,11 +456,11 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                var map = this.map = new L.Map(this.el, mapOptions).setView([mapCenterLat, mapCenterLon], mapCenterZoom);
 	               
 	                // Setup the tile layer with map tile, zoom and attribution
-					this.tileLayer = L.tileLayer(this.activeTile, {
+	                this.tileLayer = L.tileLayer(this.activeTile, {
 	                    attribution: this.attribution,
 	                    minZoom: minZoom,
 	                    maxZoom: maxZoom
-					});
+	                });
 
 	                // Add tile layer to map
 	                this.map.addLayer(this.tileLayer);   
@@ -569,11 +535,12 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                }
 	                
 	                this.pathLineLayer = L.layerGroup().addTo(this.map);
+	                this.hotlineLayer = L.layerGroup().addTo(this.map);
 	               
 	                // Init defaults
 	                this.chunk = 50000;
 	                this.offset = 0;
-					this.isInitializedDom = true;         
+	                this.isInitializedDom = true;         
 	                this.clearMap = false;
 	            } 
 
@@ -600,7 +567,7 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                this.map.setZoom(mapCenterZoom);
 	            }
 	           
-				/********* BEGIN PROCESSING DATA **********/
+	            /********* BEGIN PROCESSING DATA **********/
 	 
 	            // Iterate through each row creating layer groups per icon type
 	            // and create markers appending to a markerList in each layerfilter object
@@ -652,13 +619,13 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 
 	                var description = _.has(userData, "description") ? userData["description"]:"";
 
-					// SVG and PNG based markers both support hex iconColor do conversion outside
-					iconColor = this.convertHex(iconColor);	
+	                // SVG and PNG based markers both support hex iconColor do conversion outside
+	                iconColor = this.convertHex(iconColor);    
 
 	                if (markerType == "svg") {
-						// Update marker to shade of Awesome Marker blue
-						if(markerColor == "blue") { markerColor = "#38AADD"; }
-						markerColor = this.convertHex(markerColor);
+	                    // Update marker to shade of Awesome Marker blue
+	                    if(markerColor == "blue") { markerColor = "#38AADD"; }
+	                    markerColor = this.convertHex(markerColor);
 
 	                    var markerIcon = L.VectorMarkers.icon({
 	                        icon: icon,
@@ -669,7 +636,7 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                        extraIconClasses: extraClasses,
 	                        prefix: prefix,
 	                        iconSize: markerSize,
-							iconAnchor: markerAnchor,
+	                        iconAnchor: markerAnchor,
 	                    });
 	                } else {
 	                    // Create markerIcon
@@ -688,8 +655,8 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                }
 
 	                /* Add the icon to layerFilter so we can access properties
-					 * for overlay in addLayerToControl
-					 */
+	                 * for overlay in addLayerToControl
+	                 */
 	                if (typeof this.layerFilter[icon] !== 'undefined') {
 	                    this.layerFilter[icon].icon = markerIcon;
 	                }
@@ -699,10 +666,10 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                                      {icon: markerIcon,
 	                                       title: title,
 	                                       layerDescription: layerDescription,
-										   zIndexOffset: markerPriority});
+	                                       zIndexOffset: markerPriority});
 
 	                if(this.isArgTrue(drilldown)) {
-						var drilldownFields = this.validateFields(userData);
+	                    var drilldownFields = this.validateFields(userData);
 	                    marker.on('dblclick', this._drilldown.bind(this, drilldownFields));
 	                }
 
@@ -761,7 +728,6 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                    // Add layer controls
 	                    this.addLayerToControl(lg, this.control);
 	                }, this);
-
 	            }
 
 	            // Chunk through data 50k results at a time
@@ -796,12 +762,64 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                paths = _.groupBy(paths, function (d) {
 	                    return d.colorIndex;
 	                });
-	                
+
 	                _.each(paths, function(path) {
 	                    L.polyline(_.pluck(path, 'coordinates'), {color: colors[path[0]['colorIndex'] % colors.length]}).addTo(this.pathLineLayer);
 	                }, this);
 	            }
+
+	            // if(this.isArgTrue(drawHeatline))
+	            if(this.isArgTrue(showHeatLine))
+	            {
+	                var activePaths = [];
 	                
+	                var paths = _.map(dataRows, function (d) {
+	                    var colorIndex = 0;
+	                    if (pathIdentifier) {
+	                        var id = d[pathIdentifier];
+	                        var colorIndex = activePaths.indexOf(id);
+	                        if (colorIndex < 0) {
+	                            colorIndex = activePaths.push(id) - 1;
+	                        }
+	                    }
+	                    var fieldId = "value";
+	                    if(heatLineIdentifier != "")
+	                    {
+	                        fieldId = heatLineIdentifier;
+	                        // console.log(fieldId);
+	                    }
+
+	                    return {
+	                        'coordinates': [d['latitude'], d['longitude'], d[fieldId]],
+	                    };
+	                });
+	                paths = _.groupBy(paths, function (d) {
+	                    return d.colorIndex;
+	                });
+
+	                _.each(paths, function(path) {
+	                    let coords = _.pluck(path, 'coordinates');
+	                    // console.log(coords);
+	                    let options = {
+	                        min: heatLineMinValue,
+	                        max: heatLineMaxValue,
+	                        palette: {
+	                            0.0: heatLineMinColor,
+	                            0.5: heatLineMedColor,
+	                            1.0: heatLineMaxColor
+	                        },
+	                        weight: heatLineWeight,
+	                        outlineColor: heatLineBorderColor,
+	                        outlineWidth: heatLineBorderWidth
+	                    };
+	                    // console.log(options);
+	                    let mapHotline = L.hotline(coords, options);
+
+	                    // console.log(mapHotline);
+	                    mapHotline.addTo(this.hotlineLayer);
+	                    
+	                }, this);
+	            }
 	            return this;
 	        }
 	    });
@@ -44635,6 +44653,469 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 /* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
+	 (c) 2017, iosphere GmbH
+	 Leaflet.hotline, a Leaflet plugin for drawing gradients along polylines.
+	 https://github.com/iosphere/Leaflet.hotline/
+	*/
+
+	(function (root, plugin) {
+		/**
+		 * UMD wrapper.
+		 * When used directly in the Browser it expects Leaflet to be globally
+		 * available as `L`. The plugin then adds itself to Leaflet.
+		 * When used as a CommonJS module (e.g. with browserify) only the plugin
+		 * factory gets exported, so one hast to call the factory manually and pass
+		 * Leaflet as the only parameter.
+		 * @see {@link https://github.com/umdjs/umd}
+		 */
+		if (true) {
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(2)], __WEBPACK_AMD_DEFINE_FACTORY__ = (plugin), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else if (typeof exports === 'object') {
+			module.exports = plugin;
+		} else {
+			plugin(root.L);
+		}
+	}(this, function (L) {
+		// Plugin is already added to Leaflet
+		if (L.Hotline) {
+			return L;
+		}
+
+		/**
+		 * Core renderer.
+		 * @constructor
+		 * @param {HTMLElement | string} canvas - &lt;canvas> element or its id
+		 * to initialize the instance on.
+		 */
+		var Hotline = function (canvas) {
+			if (!(this instanceof Hotline)) { return new Hotline(canvas); }
+
+			var defaultPalette = {
+				0.0: 'green',
+				0.5: 'yellow',
+				1.0: 'red'
+			};
+
+			this._canvas = canvas = typeof canvas === 'string'
+				? document.getElementById(canvas)
+				: canvas;
+
+			this._ctx = canvas.getContext('2d');
+			this._width = canvas.width;
+			this._height = canvas.height;
+
+			this._weight = 5;
+			this._outlineWidth = 1;
+			this._outlineColor = 'black';
+
+			this._min = 0;
+			this._max = 1;
+
+			this._data = [];
+
+			this.palette(defaultPalette);
+		};
+
+		Hotline.prototype = {
+			/**
+			 * Sets the width of the canvas. Used when clearing the canvas.
+			 * @param {number} width - Width of the canvas.
+			 */
+			width: function (width) {
+				this._width = width;
+				return this;
+			},
+
+			/**
+			 * Sets the height of the canvas. Used when clearing the canvas.
+			 * @param {number} height - Height of the canvas.
+			 */
+			height: function (height) {
+				this._height = height;
+				return this;
+			},
+
+			/**
+			 * Sets the weight of the path.
+			 * @param {number} weight - Weight of the path in px.
+			 */
+			weight: function (weight) {
+				this._weight = weight;
+				return this;
+			},
+
+			/**
+			 * Sets the width of the outline around the path.
+			 * @param {number} outlineWidth - Width of the outline in px.
+			 */
+			outlineWidth: function (outlineWidth) {
+				this._outlineWidth = outlineWidth;
+				return this;
+			},
+
+			/**
+			 * Sets the color of the outline around the path.
+			 * @param {string} outlineColor - A CSS color value.
+			 */
+			outlineColor: function (outlineColor) {
+				this._outlineColor = outlineColor;
+				return this;
+			},
+
+			/**
+			 * Sets the palette gradient.
+			 * @param {Object.<number, string>} palette  - Gradient definition.
+			 * e.g. { 0.0: 'white', 1.0: 'black' }
+			 */
+			palette: function (palette) {
+				var canvas = document.createElement('canvas'),
+						ctx = canvas.getContext('2d'),
+						gradient = ctx.createLinearGradient(0, 0, 0, 256);
+
+				canvas.width = 1;
+				canvas.height = 256;
+
+				for (var i in palette) {
+					gradient.addColorStop(i, palette[i]);
+				}
+
+				ctx.fillStyle = gradient;
+				ctx.fillRect(0, 0, 1, 256);
+
+				this._palette = ctx.getImageData(0, 0, 1, 256).data;
+
+				return this;
+			},
+
+			/**
+			 * Sets the value used at the start of the palette gradient.
+			 * @param {number} min
+			 */
+			min: function (min) {
+				this._min = min;
+				return this;
+			},
+
+			/**
+			 * Sets the value used at the end of the palette gradient.
+			 * @param {number} max
+			 */
+			max: function (max) {
+				this._max = max;
+				return this;
+			},
+
+			/**
+			 * A path to rander as a hotline.
+			 * @typedef Array.<{x:number, y:number, z:number}> Path - Array of x, y and z coordinates.
+			 */
+
+			/**
+			 * Sets the data that gets drawn on the canvas.
+			 * @param {(Path|Path[])} data - A single path or an array of paths.
+			 */
+			data: function (data) {
+				this._data = data;
+				return this;
+			},
+
+			/**
+			 * Adds a path to the list of paths.
+			 * @param {Path} path
+			 */
+			add: function (path) {
+				this._data.push(path);
+				return this;
+			},
+
+			/**
+			 * Draws the currently set paths.
+			 */
+			draw: function () {
+				var ctx = this._ctx;
+
+				ctx.globalCompositeOperation = 'source-over';
+				ctx.lineCap = 'round';
+
+				this._drawOutline(ctx);
+				this._drawHotline(ctx);
+
+				return this;
+			},
+
+			/**
+			 * Gets the RGB values of a given z value of the current palette.
+			 * @param {number} value - Value to get the color for, should be between min and max.
+			 * @returns {Array.<number>} The RGB values as an array [r, g, b]
+			 */
+			getRGBForValue: function (value) {
+				var valueRelative = Math.min(Math.max((value - this._min) / (this._max - this._min), 0), 0.999);
+				var paletteIndex = Math.floor(valueRelative * 256) * 4;
+
+				return [
+					this._palette[paletteIndex],
+					this._palette[paletteIndex + 1],
+					this._palette[paletteIndex + 2]
+				];
+			},
+
+			/**
+			 * Draws the outline of the graphs.
+			 * @private
+			 */
+			_drawOutline: function (ctx) {
+				var i, j, dataLength, path, pathLength, pointStart, pointEnd;
+
+				if (this._outlineWidth) {
+					for (i = 0, dataLength = this._data.length; i < dataLength; i++) {
+						path = this._data[i];
+						ctx.lineWidth = this._weight + 2 * this._outlineWidth;
+
+						for (j = 1, pathLength = path.length; j < pathLength; j++) {
+							pointStart = path[j - 1];
+							pointEnd = path[j];
+
+							ctx.strokeStyle = this._outlineColor;
+							ctx.beginPath();
+							ctx.moveTo(pointStart.x, pointStart.y);
+							ctx.lineTo(pointEnd.x, pointEnd.y);
+							ctx.stroke();
+						}
+					}
+				}
+			},
+
+			/**
+			 * Draws the color encoded hotline of the graphs.
+			 * @private
+			 */
+			_drawHotline: function (ctx) {
+				var i, j, dataLength, path, pathLength, pointStart, pointEnd,
+						gradient, gradientStartRGB, gradientEndRGB;
+
+				ctx.lineWidth = this._weight;
+
+				for (i = 0, dataLength = this._data.length; i < dataLength; i++) {
+					path = this._data[i];
+
+					for (j = 1, pathLength = path.length; j < pathLength; j++) {
+						pointStart = path[j - 1];
+						pointEnd = path[j];
+
+						// Create a gradient for each segment, pick start end end colors from palette gradient
+						gradient = ctx.createLinearGradient(pointStart.x, pointStart.y, pointEnd.x, pointEnd.y);
+						gradientStartRGB = this.getRGBForValue(pointStart.z);
+						gradientEndRGB = this.getRGBForValue(pointEnd.z);
+						gradient.addColorStop(0, 'rgb(' + gradientStartRGB.join(',') + ')');
+						gradient.addColorStop(1, 'rgb(' + gradientEndRGB.join(',') + ')');
+
+						ctx.strokeStyle = gradient;
+						ctx.beginPath();
+						ctx.moveTo(pointStart.x, pointStart.y);
+						ctx.lineTo(pointEnd.x, pointEnd.y);
+						ctx.stroke();
+					}
+				}
+			}
+		};
+
+
+		var Renderer = L.Canvas.extend({
+			_initContainer: function () {
+				L.Canvas.prototype._initContainer.call(this);
+				this._hotline = new Hotline(this._container);
+			},
+
+			_update: function () {
+				L.Canvas.prototype._update.call(this);
+				this._hotline.width(this._container.width);
+				this._hotline.height(this._container.height);
+			},
+
+			_updatePoly: function (layer) {
+				if (!this._drawing) { return; }
+
+				var parts = layer._parts;
+
+				if (!parts.length) { return; }
+
+				this._updateOptions(layer);
+
+				this._hotline
+					.data(parts)
+					.draw();
+			},
+
+			_updateOptions: function (layer) {
+				if (layer.options.min != null) {
+					this._hotline.min(layer.options.min);
+				}
+				if (layer.options.max != null) {
+					this._hotline.max(layer.options.max);
+				}
+				if (layer.options.weight != null) {
+					this._hotline.weight(layer.options.weight);
+				}
+				if (layer.options.outlineWidth != null) {
+					this._hotline.outlineWidth(layer.options.outlineWidth);
+				}
+				if (layer.options.outlineColor != null) {
+					this._hotline.outlineColor(layer.options.outlineColor);
+				}
+				if (layer.options.palette) {
+					this._hotline.palette(layer.options.palette);
+				}
+			}
+		});
+
+		var renderer = function (options) {
+			return L.Browser.canvas ? new Renderer(options) : null;
+		};
+
+
+		var Util = {
+			/**
+			 * This is just a copy of the original Leaflet version that support a third z coordinate.
+			 * @see {@link http://leafletjs.com/reference.html#lineutil-clipsegment|Leaflet}
+			 */
+			clipSegment: function (a, b, bounds, useLastCode, round) {
+				var codeA = useLastCode ? this._lastCode : L.LineUtil._getBitCode(a, bounds),
+						codeB = L.LineUtil._getBitCode(b, bounds),
+						codeOut, p, newCode;
+
+				// save 2nd code to avoid calculating it on the next segment
+				this._lastCode = codeB;
+
+				while (true) {
+					// if a,b is inside the clip window (trivial accept)
+					if (!(codeA | codeB)) {
+						return [a, b];
+					// if a,b is outside the clip window (trivial reject)
+					} else if (codeA & codeB) {
+						return false;
+					// other cases
+					} else {
+						codeOut = codeA || codeB;
+						p = L.LineUtil._getEdgeIntersection(a, b, codeOut, bounds, round);
+						newCode = L.LineUtil._getBitCode(p, bounds);
+
+						if (codeOut === codeA) {
+							p.z = a.z;
+							a = p;
+							codeA = newCode;
+						} else {
+							p.z = b.z;
+							b = p;
+							codeB = newCode;
+						}
+					}
+				}
+			}
+		};
+
+
+		L.Hotline = L.Polyline.extend({
+			statics: {
+				Renderer: Renderer,
+				renderer: renderer
+			},
+
+			options: {
+				renderer: renderer(),
+				min: 0,
+				max: 1,
+				palette: {
+					0.0: 'green',
+					0.5: 'yellow',
+					1.0: 'red'
+				},
+				weight: 5,
+				outlineColor: 'black',
+				outlineWidth: 1
+			},
+
+			getRGBForValue: function (value) {
+				return this._renderer._hotline.getRGBForValue(value);
+			},
+
+			/**
+			 * Just like the Leaflet version, but with support for a z coordinate.
+			 */
+			_projectLatlngs: function (latlngs, result, projectedBounds) {
+				var flat = latlngs[0] instanceof L.LatLng,
+						len = latlngs.length,
+						i, ring;
+
+				if (flat) {
+					ring = [];
+					for (i = 0; i < len; i++) {
+						ring[i] = this._map.latLngToLayerPoint(latlngs[i]);
+						// Add the altitude of the latLng as the z coordinate to the point
+						ring[i].z = latlngs[i].alt;
+						projectedBounds.extend(ring[i]);
+					}
+					result.push(ring);
+				} else {
+					for (i = 0; i < len; i++) {
+						this._projectLatlngs(latlngs[i], result, projectedBounds);
+					}
+				}
+			},
+
+			/**
+			 * Just like the Leaflet version, but uses `Util.clipSegment()`.
+			 */
+			_clipPoints: function () {
+				if (this.options.noClip) {
+					this._parts = this._rings;
+					return;
+				}
+
+				this._parts = [];
+
+				var parts = this._parts,
+						bounds = this._renderer._bounds,
+						i, j, k, len, len2, segment, points;
+
+				for (i = 0, k = 0, len = this._rings.length; i < len; i++) {
+					points = this._rings[i];
+
+					for (j = 0, len2 = points.length; j < len2 - 1; j++) {
+						segment = Util.clipSegment(points[j], points[j + 1], bounds, j, true);
+
+						if (!segment) { continue; }
+
+						parts[k] = parts[k] || [];
+						parts[k].push(segment[0]);
+
+						// if segment goes out of screen, or it's the last one, it's the end of the line part
+						if ((segment[1] !== points[j + 1]) || (j === len2 - 2)) {
+							parts[k].push(segment[1]);
+							k++;
+						}
+					}
+				}
+			},
+
+			_clickTolerance: function () {
+				return this.options.weight / 2 + this.options.outlineWidth + (L.Browser.touch ? 10 : 0);
+			}
+		});
+
+		L.hotline = function (latlngs, options) {
+			return new L.Hotline(latlngs, options);
+		};
+
+
+		return L;
+	}));
+
+
+/***/ },
+/* 116 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/*** IMPORTS FROM imports-loader ***/
 	var L = __webpack_require__(2);
 
@@ -47298,7 +47779,7 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 
 
 /***/ },
-/* 116 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -47523,7 +48004,7 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 
 
 /***/ },
-/* 117 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var require;var require;var __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*** IMPORTS FROM imports-loader ***/
@@ -54824,7 +55305,7 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 118 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -54960,7 +55441,7 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 
 
 /***/ },
-/* 119 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
