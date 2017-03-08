@@ -77,7 +77,7 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	        tileLayer: null,
 	        pathLineLayer: null,
 	        contribUri: '/en-US/static/app/leaflet_maps_app/visualizations/leaflet_maps/contrib/',
-	        defaultConfig:  {
+	        defaultConfig: {
 	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.cluster': 1,
 	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.allPopups': 0,
 	            'display.visualizations.custom.leaflet_maps_app.leaflet_maps.multiplePopups': 0,
@@ -345,6 +345,8 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 
 	        reflow: function() {
 	            this.invalidateUpdateView();
+	            console.log("reflow: ");
+	            console.log(this);
 	        },
 
 	        // Do the work of creating the viz
@@ -355,17 +357,17 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	            var appNamespace = this.getPropertyNamespaceInfo().propertyNamespace;
 	            // Get format parameters or set default values according to Modular Viz -> Splunk 6.5.2
 	            // Using foo = config["foo"] || 100; is not a good idea. You can't assign the values "0" or "false",
-	            // because they will always be OR'ed to false and the variable foo will be 100.
-	            var cluster     = parseInt(config[appNamespace + 'cluster']),
-	                allPopups   = parseInt(config[appNamespace + 'allPopups']),
+	            // because they will always be OR'ed to false and thus 100 is assigned to foo.
+	            var cluster = parseInt(config[appNamespace + 'cluster']),
+	                allPopups = parseInt(config[appNamespace + 'allPopups']),
 	                multiplePopups = parseInt(config[appNamespace + 'multiplePopups']),
-	                animate     = parseInt(config[appNamespace + 'animate']),
+	                animate = parseInt(config[appNamespace + 'animate']),
 	                singleMarkerMode = parseInt(config[appNamespace + 'singleMarkerMode']),
 	                maxClusterRadius = parseInt(config[appNamespace + 'maxClusterRadius']),
 	                maxSpiderfySize = parseInt(config[appNamespace + 'maxSpiderfySize']),
 	                spiderfyDistanceMultiplier = parseInt(config[appNamespace + 'spiderfyDistanceMultiplier']),
-	                mapTile     = SplunkVisualizationUtils.makeSafeUrl(config[appNamespace + 'mapTile']),
-	                mapTileOverride  = SplunkVisualizationUtils.makeSafeUrl(config[appNamespace + 'mapTileOverride']),
+	                mapTile = SplunkVisualizationUtils.makeSafeUrl(config[appNamespace + 'mapTile']),
+	                mapTileOverride = SplunkVisualizationUtils.makeSafeUrl(config[appNamespace + 'mapTileOverride']),
 	                mapAttributionOverride = config[appNamespace + 'mapAttributionOverride'],
 	                layerControl = parseInt(config[appNamespace + 'layerControl']),
 	                layerControlCollapsed = parseInt(config[appNamespace + 'layerControlCollapsed']),
@@ -377,9 +379,9 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                mapCenterZoom = parseInt(config[appNamespace + 'mapCenterZoom']),
 	                mapCenterLat = parseFloat(config[appNamespace + 'mapCenterLat']),
 	                mapCenterLon = parseFloat(config[appNamespace + 'mapCenterLon']),
-	                minZoom     = parseInt(config[appNamespace + 'minZoom']),
-	                maxZoom     = parseInt(config[appNamespace + 'maxZoom']),
-	                kmlOverlay  = config[appNamespace + 'kmlOverlay'],
+	                minZoom = parseInt(config[appNamespace + 'minZoom']),
+	                maxZoom = parseInt(config[appNamespace + 'maxZoom']),
+	                kmlOverlay = config[appNamespace + 'kmlOverlay'],
 	                rangeOneBgColor = config[appNamespace + 'rangeOneBgColor'],
 	                rangeOneFgColor = config[appNamespace + 'rangeOneFgColor'],
 	                warningThreshold = parseInt(config[appNamespace + 'warningThreshold']),
@@ -400,7 +402,7 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                showPathLines = parseInt(config[appNamespace + 'showPathLines']),
 	                pathIdentifier = config[appNamespace + 'pathIdentifier'],
 	                pathColorList = config[appNamespace + 'pathColorList'],
-	                showHeatLine  = parseInt(config[appNamespace + 'showHeatLine']),
+	                showHeatLine = parseInt(config[appNamespace + 'showHeatLine']),
 	                heatLineIdentifier = config[appNamespace + 'heatLineIdentifier'],
 	                heatLineMaxValue = parseInt(config[appNamespace + 'heatLineMaxValue']),
 	                heatLineMinValue = parseInt(config[appNamespace + 'heatLineMinValue']),
@@ -842,7 +844,7 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                        }
 	                    }
 	                    var fieldId = "value";
-	                    if(heatLineIdentifier != "")
+	                    if (typeof(heatLineIdentifier) != "undefined" && heatLineIdentifier != "")
 	                    {
 	                        fieldId = heatLineIdentifier;
 	                        // console.log(fieldId);

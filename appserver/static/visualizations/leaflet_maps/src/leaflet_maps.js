@@ -300,6 +300,8 @@ function(
 
         reflow: function() {
             this.invalidateUpdateView();
+            console.log("reflow: ");
+            console.log(this);
         },
 
         // Do the work of creating the viz
@@ -797,7 +799,7 @@ function(
                         }
                     }
                     var fieldId = "value";
-                    if(heatLineIdentifier != "")
+                    if (typeof(heatLineIdentifier) != "undefined" && heatLineIdentifier != "")
                     {
                         fieldId = heatLineIdentifier;
                         // console.log(fieldId);
