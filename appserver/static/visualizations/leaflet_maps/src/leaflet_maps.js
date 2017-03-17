@@ -27,6 +27,7 @@ function(
     SplunkVisualizationUtils
 ) {
     
+
     return SplunkVisualizationBase.extend({
         maxResults: 0,
         tileLayer: null,
@@ -136,7 +137,9 @@ function(
                                'shadowSize',
                                'prefix',
                                'extraClasses',
-                               'layerDescription'];
+						       'layerDescription',
+							   'pathWeight',
+							   'pathOpacity'];
             $.each(obj, function(key, value) {
                 if($.inArray(key, validFields) === -1) {
                     invalidFields[key] = value;
@@ -306,6 +309,8 @@ function(
 
         // Do the work of creating the viz
         updateView: function(data, config) {
+            // viz gets passed empty config until you click the 'format' dropdown
+            // intialize with defaults
             if(_.isEmpty(config)) {
                 config = this.defaultConfig;
             }
@@ -763,6 +768,9 @@ function(
                 
                 var paths = _.map(dataRows, function (d) {
                     var colorIndex = 0;
+					var pathWeight = (_.has(d, "pathWeight")) ? d["pathWeight"]:5;
+					var pathOpacity = (_.has(d, "pathOpacity")) ? d["pathOpacity"]:0.5;
+
                     if (pathIdentifier) {
                         var id = d[pathIdentifier];
                         var colorIndex = activePaths.indexOf(id);
@@ -772,7 +780,9 @@ function(
                     }
                     return {
                         'coordinates': L.latLng(d['latitude'], d['longitude']),
-                        'colorIndex': colorIndex
+						'colorIndex': colorIndex,
+						'pathWeight': pathWeight,
+						'pathOpacity': pathOpacity
                     };
                 });
                 paths = _.groupBy(paths, function (d) {
@@ -780,7 +790,9 @@ function(
                 });
 
                 _.each(paths, function(path) {
-                    L.polyline(_.pluck(path, 'coordinates'), {color: colors[path[0]['colorIndex'] % colors.length]}).addTo(this.pathLineLayer);
+					L.polyline(_.pluck(path, 'coordinates'), {color: colors[path[0]['colorIndex'] % colors.length],
+															  weight: path[0]['pathWeight'],
+															  opacity: path[0]['pathOpacity']}).addTo(this.pathLineLayer);
                 }, this);
             }
 

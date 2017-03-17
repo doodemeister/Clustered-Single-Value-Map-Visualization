@@ -72,6 +72,7 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	    SplunkVisualizationUtils
 	) {
 	    
+
 	    return SplunkVisualizationBase.extend({
 	        maxResults: 0,
 	        tileLayer: null,
@@ -181,7 +182,9 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                               'shadowSize',
 	                               'prefix',
 	                               'extraClasses',
-	                               'layerDescription'];
+							       'layerDescription',
+								   'pathWeight',
+								   'pathOpacity'];
 	            $.each(obj, function(key, value) {
 	                if($.inArray(key, validFields) === -1) {
 	                    invalidFields[key] = value;
@@ -351,6 +354,8 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 
 	        // Do the work of creating the viz
 	        updateView: function(data, config) {
+	            // viz gets passed empty config until you click the 'format' dropdown
+	            // intialize with defaults
 	            if(_.isEmpty(config)) {
 	                config = this.defaultConfig;
 	            }
@@ -808,6 +813,9 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                
 	                var paths = _.map(dataRows, function (d) {
 	                    var colorIndex = 0;
+						var pathWeight = (_.has(d, "pathWeight")) ? d["pathWeight"]:5;
+						var pathOpacity = (_.has(d, "pathOpacity")) ? d["pathOpacity"]:0.5;
+
 	                    if (pathIdentifier) {
 	                        var id = d[pathIdentifier];
 	                        var colorIndex = activePaths.indexOf(id);
@@ -817,7 +825,9 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                    }
 	                    return {
 	                        'coordinates': L.latLng(d['latitude'], d['longitude']),
-	                        'colorIndex': colorIndex
+							'colorIndex': colorIndex,
+							'pathWeight': pathWeight,
+							'pathOpacity': pathOpacity
 	                    };
 	                });
 	                paths = _.groupBy(paths, function (d) {
@@ -825,7 +835,9 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                });
 
 	                _.each(paths, function(path) {
-	                    L.polyline(_.pluck(path, 'coordinates'), {color: colors[path[0]['colorIndex'] % colors.length]}).addTo(this.pathLineLayer);
+						L.polyline(_.pluck(path, 'coordinates'), {color: colors[path[0]['colorIndex'] % colors.length],
+																  weight: path[0]['pathWeight'],
+																  opacity: path[0]['pathOpacity']}).addTo(this.pathLineLayer);
 	                }, this);
 	            }
 
@@ -1037,16 +1049,22 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                contextmenu: this,
 	                el: item
 	            });
+
+	            return item;
 	        }
+
+	        return null;
 	    },
 
 	    removeAllItems: function () {
-	        var item;
+	        var items = this._container.children,
+	            item;
 
-	        while (this._container.children.length) {
-	            item = this._container.children[0];
+	        while (items.length) {
+	            item = items[0];
 	            this._removeItem(L.Util.stamp(item));
 	        }
+	        return items;
 	    },
 
 	    hideAllItems: function () {
@@ -1215,7 +1233,7 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	                func.call(context || map, me._showLocation);
 	            }
 
-	            me._map.fire('contextmenu:select', {
+	            me._map.fire('contextmenu.select', {
 	                contextmenu: me,
 	                el: el
 	            });
@@ -29032,7 +29050,7 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	  this.highWaterMark = hwm || hwm === 0 ? hwm : defaultHwm;
 
 	  // cast to ints.
-	  this.highWaterMark = ~ ~this.highWaterMark;
+	  this.highWaterMark = ~~this.highWaterMark;
 
 	  // A linked list is used to store data chunks instead of an array because the
 	  // linked list can remove elements from the beginning faster than
@@ -30398,7 +30416,7 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	  this.highWaterMark = hwm || hwm === 0 ? hwm : defaultHwm;
 
 	  // cast to ints.
-	  this.highWaterMark = ~ ~this.highWaterMark;
+	  this.highWaterMark = ~~this.highWaterMark;
 
 	  // drain event flag.
 	  this.needDrain = false;
@@ -30553,20 +30571,16 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	  processNextTick(cb, er);
 	}
 
-	// If we get something that is not a buffer, string, null, or undefined,
-	// and we're not in objectMode, then that's an error.
-	// Otherwise stream chunks are all considered to be of length=1, and the
-	// watermarks determine how many objects to keep in the buffer, rather than
-	// how many bytes or characters.
+	// Checks that a user-supplied chunk is valid, especially for the particular
+	// mode the stream is in. Currently this means that `null` is never accepted
+	// and undefined/non-string values are only allowed in object mode.
 	function validChunk(stream, state, chunk, cb) {
 	  var valid = true;
 	  var er = false;
-	  // Always throw error if a null is written
-	  // if we are not in object mode then throw
-	  // if it is not a buffer, string, or undefined.
+
 	  if (chunk === null) {
 	    er = new TypeError('May not write null values to stream');
-	  } else if (!Buffer.isBuffer(chunk) && typeof chunk !== 'string' && chunk !== undefined && !state.objectMode) {
+	  } else if (typeof chunk !== 'string' && chunk !== undefined && !state.objectMode) {
 	    er = new TypeError('Invalid non-string/buffer chunk');
 	  }
 	  if (er) {
@@ -30580,19 +30594,20 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	Writable.prototype.write = function (chunk, encoding, cb) {
 	  var state = this._writableState;
 	  var ret = false;
+	  var isBuf = Buffer.isBuffer(chunk);
 
 	  if (typeof encoding === 'function') {
 	    cb = encoding;
 	    encoding = null;
 	  }
 
-	  if (Buffer.isBuffer(chunk)) encoding = 'buffer';else if (!encoding) encoding = state.defaultEncoding;
+	  if (isBuf) encoding = 'buffer';else if (!encoding) encoding = state.defaultEncoding;
 
 	  if (typeof cb !== 'function') cb = nop;
 
-	  if (state.ended) writeAfterEnd(this, cb);else if (validChunk(this, state, chunk, cb)) {
+	  if (state.ended) writeAfterEnd(this, cb);else if (isBuf || validChunk(this, state, chunk, cb)) {
 	    state.pendingcb++;
-	    ret = writeOrBuffer(this, state, chunk, encoding, cb);
+	    ret = writeOrBuffer(this, state, isBuf, chunk, encoding, cb);
 	  }
 
 	  return ret;
@@ -30632,10 +30647,11 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	// if we're already writing something, then just put this
 	// in the queue, and wait our turn.  Otherwise, call _write
 	// If we return false, then we need a drain event, so set that flag.
-	function writeOrBuffer(stream, state, chunk, encoding, cb) {
-	  chunk = decodeChunk(state, chunk, encoding);
-
-	  if (Buffer.isBuffer(chunk)) encoding = 'buffer';
+	function writeOrBuffer(stream, state, isBuf, chunk, encoding, cb) {
+	  if (!isBuf) {
+	    chunk = decodeChunk(state, chunk, encoding);
+	    if (Buffer.isBuffer(chunk)) encoding = 'buffer';
+	  }
 	  var len = state.objectMode ? 1 : chunk.length;
 
 	  state.length += len;
@@ -30704,8 +30720,8 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 	      asyncWrite(afterWrite, stream, state, finished, cb);
 	      /*</replacement>*/
 	    } else {
-	        afterWrite(stream, state, finished, cb);
-	      }
+	      afterWrite(stream, state, finished, cb);
+	    }
 	  }
 	}
 
@@ -30856,7 +30872,6 @@ define(["vizapi/SplunkVisualizationBase","vizapi/SplunkVisualizationUtils"], fun
 
 	  this.next = null;
 	  this.entry = null;
-
 	  this.finish = function (err) {
 	    var entry = _this.entry;
 	    _this.entry = null;

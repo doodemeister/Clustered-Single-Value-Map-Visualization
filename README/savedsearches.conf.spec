@@ -40,7 +40,7 @@ display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureSecondaryArea
 display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureActiveColor = <string>
 display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureCompletedColor = <string>
 display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureLocalization = <string>
-display.visualizations.custom.leaflet_maps_app.leaflet_maps.showPathLines = <int>
+display.visualizations.custom.leaflet_maps_app.leaflet_maps.showPathLines = <string>
 display.visualizations.custom.leaflet_maps_app.leaflet_maps.pathIdentifier = <string>
 display.visualizations.custom.leaflet_maps_app.leaflet_maps.pathColorList = <string>
 display.visualizations.custom.leaflet_maps_app.leaflet_maps.showHeatLine = <int>
