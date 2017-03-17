@@ -40,3 +40,16 @@ display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureSecondaryArea
 display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureActiveColor = <string>
 display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureCompletedColor = <string>
 display.visualizations.custom.leaflet_maps_app.leaflet_maps.measureLocalization = <string>
+display.visualizations.custom.leaflet_maps_app.leaflet_maps.showPathLines = <int>
+display.visualizations.custom.leaflet_maps_app.leaflet_maps.pathIdentifier = <string>
+display.visualizations.custom.leaflet_maps_app.leaflet_maps.pathColorList = <string>
+display.visualizations.custom.leaflet_maps_app.leaflet_maps.showHeatLine = <int>
+display.visualizations.custom.leaflet_maps_app.leaflet_maps.heatLineIdentifier = <string>
+display.visualizations.custom.leaflet_maps_app.leaflet_maps.heatLineMaxValue = <float>
+display.visualizations.custom.leaflet_maps_app.leaflet_maps.heatLineMinValue = <float>
+display.visualizations.custom.leaflet_maps_app.leaflet_maps.heatLineMaxColor = <string>
+display.visualizations.custom.leaflet_maps_app.leaflet_maps.heatLineMedColor = <string>
+display.visualizations.custom.leaflet_maps_app.leaflet_maps.heatLineMinColor = <string>
+display.visualizations.custom.leaflet_maps_app.leaflet_maps.heatLineBorderWidth = <int>
+display.visualizations.custom.leaflet_maps_app.leaflet_maps.heatLineBorderColor = <string>
+display.visualizations.custom.leaflet_maps_app.leaflet_maps.heatLineWeight = <int>
